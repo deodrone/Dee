@@ -1,9 +1,35 @@
-# solidtime - The modern Open-Source Time Tracker
+# solidtime - Cash Pro
 
-[![GitHub License](https://img.shields.io/github/license/solidtime-io/solidtime?style=flat-square)](https://github.com/solidtime-io/solidtime/blob/main/LICENSE.md)
-[![Codecov](https://img.shields.io/codecov/c/github/solidtime-io/solidtime?style=flat-square&logo=codecov)](https://codecov.io/gh/solidtime-io/solidtime)
-![GitHub Actions Unit Tests Status](https://img.shields.io/github/actions/workflow/status/solidtime-io/solidtime/phpunit.yml?style=flat-square)
-![PHPStan badge](https://img.shields.io/badge/PHPStan-Level_7-blue?style=flat-square&color=blue)
+# In services/basiq.py
+class BasiqService:
+    def __init__(self, api_key: str):
+        self.base_url =https://api.basiq.io
+        self.headers = {
+            "Authorization": f"Bearer {NDkzNTMwYWYtMjVhZS00MzNjLWIyMjEtYmVjNWUwNjQzMGNhOjM2NjMxN2JmLTAxMWMtNGUwOC1hOGI5LTE3YWIyZjE3OTBmYg==}",
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        }
+    
+    async def create_user(self, email: str, phone: str, name: str):
+        # ... (your existing code)
+    
+    async def make_payment(self, source_user_id: str, destination_user_id: str, amount: float):
+        payload = {
+            "source": source_user_id,
+            "destination": destination_user_id,
+            "amount": amount
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                f"{self.base_url}/payments",
+                json=payload,
+                headers=self.headers
+            ) as response:
+                if response.status != 202:
+                    error = await response.json()
+                    raise Exception(f"Payment failed: {error}")
+                data = await response.json()
+                return data["id"]
 
 ![Screenshot of the solidtime application with header: solidtime - The modern Open-Source Time Tracker](docs/solidtime-banner.png "solidtime Banner")
 
